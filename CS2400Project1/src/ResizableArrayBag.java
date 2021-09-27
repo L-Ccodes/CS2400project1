@@ -7,16 +7,19 @@ public class ResizableArrayBag<T> implements BagInterface<T> {
 	private T[] bag;
 	private boolean integrityOK = false;
 	private int initialCapacity;
+	
+	public ResizableArrayBag() {
+		integrityOK = true;
+	}
 
 	/**This is a constructor that the bag from ArrayBagTest is sent to.
 	 * @param initialCapacity The initial size of the bag.
 	 */
 	public ResizableArrayBag(int initialCapacity)
 	{
-	  this.initialCapacity = initialCapacity;
-      // The cast is safe because the new array contains null entries
+       //The cast is safe because the new array contains null entries
       @SuppressWarnings("unchecked")
-      T[] tempBag = (T[])new ResizableArrayBag[initialCapacity]; // Unchecked cast
+      T[] tempBag = (T[])new Object[initialCapacity]; // Unchecked cast
       bag = tempBag;
       size = 0;
       integrityOK = true;
@@ -28,6 +31,7 @@ public class ResizableArrayBag<T> implements BagInterface<T> {
 	public ResizableArrayBag(T[] b) {
 		bag = Arrays.copyOf(b, b.length);
 		size = b.length;
+		integrityOK = true;
 	}
     
 	/**This checks if the object being passed is secure
@@ -66,7 +70,7 @@ public class ResizableArrayBag<T> implements BagInterface<T> {
 			int newsize = 2 * bag.length;
 			bag = Arrays.copyOf(bag, newsize);
 		}else {
-			bag[initialCapacity] = newEntry;
+			bag[size] = newEntry;
 			size++;
 		}
 		return true;
@@ -142,7 +146,7 @@ public class ResizableArrayBag<T> implements BagInterface<T> {
 		int count = 0;
 		
 		for(int i = 0; i < size; i++) {
-			if(anEntry.equals(bag[i])) {
+			if(bag[i].equals(anEntry)) {
 				count++;
 			}
 		}
@@ -174,11 +178,11 @@ public class ResizableArrayBag<T> implements BagInterface<T> {
 		
 		checkintegrity();
 		@SuppressWarnings("unchecked")
-		T[] result = (T[])new ResizableArrayBag[size];
-		int i = 0;
-		while(i < size && bag[i]!=null) {
-			result[i]= bag[i];
-			i++;
+		T[] result = (T[])new Object[size];
+		int i;
+		
+		for(i = 0; i < size; i++) {
+			result[i] = bag[i];
 		}
 		return result;
 	}
@@ -195,11 +199,11 @@ public class ResizableArrayBag<T> implements BagInterface<T> {
 		T array1[] = bag1.toArray();
 		T array2[] = bag2.toArray();
 		
-		BagInterface<T> newbag = new ResizableArrayBag<T>(minCapacity);
-		
+		BagInterface<T> newbag = new ResizableArrayBag<>(minCapacity);
 		
 		
 		for(int i = 0; i < bag1.getCurrentSize(); i++) {
+			
 			newbag.add(array1[i]);
 		}
 		for(int i = 0; i < bag2.getCurrentSize(); i++) {
@@ -218,9 +222,10 @@ public class ResizableArrayBag<T> implements BagInterface<T> {
 	public BagInterface<T> intersection(BagInterface<T> bag1, BagInterface<T> bag2){
 		
 	int capacity = Math.min(bag1.getCurrentSize(), bag2.getCurrentSize()) + 1;
-	BagInterface<T> newbag = new ResizableArrayBag<T>(capacity);
+	BagInterface<T> newbag = new ResizableArrayBag<>(capacity);
+
 	T array[] = bag1.toArray();
-	for(int i = 0; i < bag1.getCurrentSize(); i++) {
+	for(int i = 0; i < Math.min(bag1.getCurrentSize(), bag2.getCurrentSize()); i++) {
 		if(newbag.contains(array[i])) {
 			continue;
 		}else {
@@ -228,7 +233,7 @@ public class ResizableArrayBag<T> implements BagInterface<T> {
 		int second = bag2.getFrequencyOf(array[i]);
 		int minNum = Math.min(first, second);
 		   
-			for(int j = 0; j <= minNum; j++) {
+			for(int j = 0; j < minNum; j++) {
 				newbag.add(array[i]);
 			}
 		
@@ -251,9 +256,14 @@ public class ResizableArrayBag<T> implements BagInterface<T> {
 		
 		int returnObject;
 		int capacity = Math.max(bag1.getCurrentSize(), bag2.getCurrentSize()) + 1;
-		BagInterface<T> newbag = new ResizableArrayBag<T>(capacity);
-		T array[] = bag1.toArray();
+		BagInterface<T >newbag = new ResizableArrayBag<>(capacity);
+		T array[] = bag2.toArray();
+		
 	    for(int i = 0; i < bag1.getCurrentSize(); i++) {
+	    	
+	    	if(newbag.contains(array[i])) {
+	    		continue;
+	    	}
 	    	int first = bag1.getFrequencyOf(array[i]);
 	    	int second = bag2.getFrequencyOf(array[i]);
 	    	
