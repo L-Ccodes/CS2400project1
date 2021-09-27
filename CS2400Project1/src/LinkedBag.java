@@ -2,13 +2,13 @@
 public class LinkedBag<T> implements BagInterface<T>{
 
 	private Node nodeOne;
-	private int size;
+	private int size = 0;
 	
 	/** Constructor where a new linked bag is passed through
 	 */
-	public LinkedBag() {
+	public LinkedBag(int capacity) {
 	   nodeOne = null;
-	   size = 0;
+	   size = capacity;
 	}
     
 	/** Gets the current number of entries that is in the bag.
@@ -115,6 +115,8 @@ public class LinkedBag<T> implements BagInterface<T>{
 			if(anEntry.equals(currentNode.getData())) {
 				frequency++;
 			}
+			count++;
+			currentNode = currentNode.getNextNode();
 		}
 		return frequency;
 	}
@@ -144,7 +146,8 @@ public class LinkedBag<T> implements BagInterface<T>{
 	public T[] toArray() {
 		
 		@SuppressWarnings("unchecked")
-		T[] array = (T[]) new ResizableArrayBag[size];
+		T[] array = (T[]) new Object[size];
+		
 		int i = 0;
 		Node currentNode = nodeOne;
 		while((i < size) && (currentNode != null)) {
@@ -163,8 +166,8 @@ public class LinkedBag<T> implements BagInterface<T>{
 	 */
 	public BagInterface<T> union(BagInterface<T> bag1, BagInterface<T> bag2) {
 		
-		int minCapacity = bag1.getCurrentSize() + bag2.getCurrentSize();
-		BagInterface<T> newBag = new ResizableArrayBag<T>(minCapacity);
+		//int minCapacity = bag1.getCurrentSize() + bag2.getCurrentSize();
+		BagInterface<T> newBag = new LinkedBag<>(0);
 		T[] array1 = bag1.toArray();
 		T[] array2 = bag2.toArray();
 		
@@ -172,7 +175,7 @@ public class LinkedBag<T> implements BagInterface<T>{
 			newBag.add(array1[i]);
 		}
 		for(int i = 0; i < bag2.getCurrentSize(); i++) {
-			newBag.add(array2[i]);
+ 			newBag.add(array2[i]);
 		}
 		
 		return newBag;
@@ -185,8 +188,8 @@ public class LinkedBag<T> implements BagInterface<T>{
 	 */
 	public BagInterface<T> intersection(BagInterface<T> bag1, BagInterface<T> bag2) {
 		
-		int minCapacity = Math.min(bag1.getCurrentSize(), bag2.getCurrentSize()) + 1;
-		BagInterface<T> newBag = new ResizableArrayBag<T>(minCapacity);
+		//int minCapacity = Math.min(bag1.getCurrentSize(), bag2.getCurrentSize()) + 1;
+		BagInterface<T> newBag = new LinkedBag<>(0);
 		
 		T[] array = bag1.toArray();
 		
@@ -198,8 +201,8 @@ public class LinkedBag<T> implements BagInterface<T>{
 				int second = bag2.getFrequencyOf(array[i]);
 				int minNum = Math.min(first, second);
 				
-				for(int j = 0; j < minNum; i++) {
-					newBag.add(array[i]);
+				for(int j = 0; j < minNum; j++) {
+					newBag.add(array[j]);
 				}
 			}
 		}
@@ -216,7 +219,7 @@ public class LinkedBag<T> implements BagInterface<T>{
 		
 		int returnObject;
 		int minCapacity = Math.max(bag1.getCurrentSize(), bag2.getCurrentSize());
-		BagInterface<T>	newBag = new ResizableArrayBag<T>(minCapacity);
+		BagInterface<T>	newBag = new LinkedBag<>(0);
 		
 		T[] array = bag1.toArray();
 		
@@ -239,12 +242,6 @@ public class LinkedBag<T> implements BagInterface<T>{
 		
 		return newBag;
 	}
-	
-	
-	
-	
-	
-	
 	
 	private class Node{
 		
