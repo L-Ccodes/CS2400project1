@@ -1,15 +1,26 @@
 public class LinkedBag<T> implements BagInterface<T>{
 	
-	//Initialize private nodeOne and size
+	//Initialize private data fields
 	private Node nodeOne;
 	private int size = 0;
+	private boolean integrityOk = false;
 	
 	/** Constructor where a new linked bag is passed through
 	 */
 	public LinkedBag(int capacity) {
 	   nodeOne = null;
 	   size = capacity;
+	   integrityOk = true;
 	}//end constructor
+	
+	/** Checks if the object is secure.
+	 * 
+	 */
+	private void checkIntegrity() {
+		if(!integrityOk) {
+			throw new SecurityException ("Object is corrupt");
+		}
+	}
     
 	/** Gets the current number of entries that is in the bag.
 	 * @return returns the number of entries that is in the bag.
@@ -32,6 +43,8 @@ public class LinkedBag<T> implements BagInterface<T>{
 	 * @return true when the new entry is successfully added.
 	 */
 	public boolean add(T newEntry) {
+		
+		checkIntegrity();
 		Node newNode = new Node(newEntry);
 		newNode.next = nodeOne;
 		
@@ -45,6 +58,8 @@ public class LinkedBag<T> implements BagInterface<T>{
 	 */
 	public T remove() {
 		//removes random entry
+		
+		checkIntegrity();
 		T remove = null;
 		if(nodeOne != null) {
 			remove = nodeOne.getData();
@@ -60,6 +75,8 @@ public class LinkedBag<T> implements BagInterface<T>{
 	 */
 	private Node getReferenceTo(T anEntry){
 		//gets reference to an entry
+		
+		checkIntegrity();
 		boolean found = false;
 		Node currentNode = nodeOne;
 
@@ -80,6 +97,8 @@ public class LinkedBag<T> implements BagInterface<T>{
 	 */
 	public boolean remove(T anEntry) {
 		//removes a specific entry
+		
+		checkIntegrity();
 		boolean remove = false;
 		Node desiredNode = getReferenceTo(anEntry);
 			
@@ -108,6 +127,8 @@ public class LinkedBag<T> implements BagInterface<T>{
 	 */
 	public int getFrequencyOf(T anEntry) {
 		//declare frequency and count
+		
+		checkIntegrity();
 		int frequency = 0;
 		int count = 0;
 		
@@ -128,6 +149,8 @@ public class LinkedBag<T> implements BagInterface<T>{
 	 */
 	public boolean contains(T anEntry) {
 		//checks if entry is contained
+		
+		checkIntegrity();
 		boolean contains = false;
 		Node currentNode = nodeOne;
 		
