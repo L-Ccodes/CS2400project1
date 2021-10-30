@@ -1,4 +1,4 @@
-Names: Christian Williams (chrxstixnn) and Luis Navarrete
+Names: Christian Williams (chrxstixnn) and Luis Navarrete (LAN-01)
 Contributions: Christian(ResizeableArrayBag & ArrayBagTest), Luis(LinkedBag & LinkedBagTest)
 Extra Features: N/A
 Link: https://youtu.be/l-COWvAsQvA
